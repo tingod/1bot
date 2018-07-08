@@ -22,7 +22,7 @@ def tl(bot, update):
     data = {
         'info': update.effective_message.text,
     }
-    r = tuling.Tuling().text(**data)
+    r = tuling.Tuling().text(data)
     update.effective_message.reply_text(r)
 
 
