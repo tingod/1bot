@@ -28,6 +28,10 @@ if __name__ == "__main__":
                         level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+    logger.info([TOKEN, NAME, PORT])
+
+
+
     # Set up the Updater
     updater = Updater(TOKEN)
     dp = updater.dispatcher
