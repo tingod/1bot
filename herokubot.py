@@ -1,6 +1,8 @@
 import logging
 import os
 
+from models import tuling
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
@@ -11,8 +13,17 @@ def start(bot, update):
 def echo(bot, update):
     update.effective_message.reply_text(update.effective_message.text)
 
+
 def error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
+
+
+def tl(bot, update):
+    data = {
+        'info': update.effective_message.text,
+    }
+    r = tuling.Tuling().text(**data)
+    update.effective_message.reply_text(r)
 
 
 if __name__ == "__main__":
@@ -28,13 +39,14 @@ if __name__ == "__main__":
                         level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    logger.info([TOKEN, NAME, PORT])
+    logger.debug([TOKEN, NAME, PORT])
 
     # Set up the Updater
     updater = Updater(TOKEN)
     dp = updater.dispatcher
     # Add handlers
     dp.add_handler(CommandHandler('start', start))
+    dp.add_handler(CommandHandler('tuling', tl))
     dp.add_handler(MessageHandler(Filters.text, echo))
     dp.add_error_handler(error)
 
