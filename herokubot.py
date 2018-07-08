@@ -39,7 +39,7 @@ if __name__ == "__main__":
                         level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    logger.debug([TOKEN, NAME, PORT])
+    # logger.debug([TOKEN, NAME, PORT])
 
     # Set up the Updater
     updater = Updater(TOKEN)
