@@ -30,8 +30,6 @@ if __name__ == "__main__":
 
     logger.info([TOKEN, NAME, PORT])
 
-
-
     # Set up the Updater
     updater = Updater(TOKEN)
     dp = updater.dispatcher
