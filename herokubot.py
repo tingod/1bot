@@ -17,8 +17,8 @@ def error(bot, update, error):
 
 if __name__ == "__main__":
     # Set these variable to the appropriate values
-    TOKEN = "Your token from @Botfather"
-    NAME = "The name of your app on Heroku"
+    TOKEN = os.environ.get('TELEGRAM_TOKEN')
+    NAME = os.environ.get('APP_NAME')
 
     # Port is given by Heroku
     PORT = os.environ.get('PORT')
