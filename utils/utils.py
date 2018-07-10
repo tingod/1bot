@@ -1,9 +1,7 @@
 # coding: utf-8
-import urllib
-import requests
-import json
-
 import logging
+
+import requests
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger()

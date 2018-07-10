@@ -1,23 +1,42 @@
-import logging
+# coding: utf-8
+
 import os
 
+from telegram.ext import CommandHandler, MessageHandler, Filters
+
+from basebot import BaseBot
 from models import tuling
+from utils.utils import logger
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+# Set these variable to the appropriate values
+TOKEN = os.environ.get('TELEGRAM_TOKEN')
+NAME = os.environ.get('APP_NAME')
+PORT = os.environ.get('PORT')
+webhook_url = "https://{}.herokuapp.com/{}".format(NAME, TOKEN)
+
+bb = BaseBot(TOKEN)
+
+"""
+Add handlers here
+"""
 
 
+# /hello command
+@bb.handler(CommandHandler, 'hello')
+def hello(bot, update):
+    update.message.reply_text(
+        'Hello {}'.format(update.message.from_user.first_name))
+
+
+# /start command
+@bb.handler(CommandHandler, 'start')
 def start(bot, update):
-    update.effective_message.reply_text("Hi!")
+    update.message.reply_text('我是一个机器人，咱们唠嗑吧')
+    # bot.sendMessage(chat_id=update.message.chat_id, text='我是一个机器人，咱们唠嗑吧')
 
 
-def echo(bot, update):
-    update.effective_message.reply_text(update.effective_message.text)
-
-
-def error(bot, update, error):
-    logger.warning('Update "%s" caused error "%s"', update, error)
-
-
+# 图灵机器人
+@bb.handler(MessageHandler, Filters.text)
 def tl(bot, update):
     data = {
         'info': update.effective_message.text,
@@ -26,33 +45,11 @@ def tl(bot, update):
     update.effective_message.reply_text(r)
 
 
-if __name__ == "__main__":
-    # Set these variable to the appropriate values
-    TOKEN = os.environ.get('TELEGRAM_TOKEN')
-    NAME = os.environ.get('APP_NAME')
+# Unset command
+@bb.handler(MessageHandler, Filters.command)
+def unknown(bot, update):
+    update.message.reply_text('No such command:{c}'.format(c=update.effective_message.text))
 
-    # Port is given by Heroku
-    PORT = os.environ.get('PORT')
 
-    # Enable logging
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                        level=logging.INFO)
-    logger = logging.getLogger(__name__)
-
-    # logger.debug([TOKEN, NAME, PORT])
-
-    # Set up the Updater
-    updater = Updater(TOKEN)
-    dp = updater.dispatcher
-    # Add handlers
-    dp.add_handler(CommandHandler('start', start))
-    dp.add_handler(CommandHandler('tuling', tl))
-    dp.add_handler(MessageHandler(Filters.text, echo))
-    dp.add_error_handler(error)
-
-    # Start the webhook
-    updater.start_webhook(listen="0.0.0.0",
-                          port=int(PORT),
-                          url_path=TOKEN)
-    updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
-    updater.idle()
+# Run bot
+bb.go(webhook_url=webhook_url, port=PORT)

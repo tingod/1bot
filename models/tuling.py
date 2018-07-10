@@ -1,30 +1,5 @@
 # coding: utf-8
-from utils.utils import sj, s
-
-
-def tuling(message, session):
-    tm = Tuling()
-    params = {
-        'info': message.content,
-        'userid': message.source
-    }
-    rtn = tm.fetch(params)
-    if 'url' in rtn:
-        """
-        图灵用的是360搜索，在此取其json格式解析
-        """
-        _s = sj(url=rtn['url'], params={'a': 'jsonpview'})
-        _j = _s['data']
-        # print(_j)
-        _l = []
-        # _l.append(["title", "description", "img", "url"])
-        for i in range(0, 8):
-            # print(_j[i]['img_url'])
-            _l.append([_j[i]['title'], _j[i]['site'], _j[i]['img_url'], _j[i]['purl']])
-        # print(_l)
-        return _l
-    else:
-        return rtn['text']
+from utils.utils import sj
 
 
 class Tuling(object):
