@@ -1,4 +1,5 @@
 # coding: utf-8
+import random
 from utils.utils import sj, get_random_user_agent
 
 
@@ -16,11 +17,17 @@ class Qiubai(object):
     #         type='hot'
     #         self.__BASE_URL = self.__BASE_URL.format(type=type)
 
-    def fetch(self, _type):
-        return sj(self.__BASE_URL.format(type=_type), params=self.__PARAMS, headers=self.__HEADERS)
+    def fetch(self, _type, _params=None):
+        if not _params:
+            _params = self.__PARAMS
+        return sj(self.__BASE_URL.format(type=_type), params=_params, headers=self.__HEADERS)
 
     def text(self):
-        return self.fetch('text')
+        p = {
+            'count':1,
+            'page':random.randint()+1,
+        }
+        return self.fetch('text', p)
 
 
     def image(self):
