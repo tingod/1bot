@@ -25,7 +25,7 @@ class Qiubai(object):
     def text(self):
         p = {
             'count':1,
-            'page':random.randint()+1,
+            'page':random.randint(1, 10000),
         }
         return self.fetch('text', p)
 
