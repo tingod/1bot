@@ -26,10 +26,12 @@ def tt(bot, update):
     # update.effective_message.text
     tt = toutiao.Toutiao()
     r = tt.fetch('news_hot')
-    reply = '{title} by {source} \n{abstract} \n{article_url}'
+    reply = '*{source}*\n' \
+            '[{title}]({article_url})\n' \
+            '{abstract}'
     for d in r['data']:
         # logger.info(d)
-        update.message.reply_text(
+        update.message.reply_markdown(
             reply.format(title=d['title'], abstract=d['abstract'], source=d['source'], article_url=d['article_url']))
 
 
