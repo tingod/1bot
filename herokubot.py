@@ -5,7 +5,7 @@ import os
 from telegram.ext import CommandHandler, MessageHandler, Filters
 
 from basebot import BaseBot
-from models import tuling
+from models import tuling, toutiao
 from utils.utils import logger
 
 # Set these variable to the appropriate values
@@ -21,11 +21,16 @@ Add handlers here
 """
 
 
-# /hello command
-@bb.handler(CommandHandler, 'hello')
-def hello(bot, update):
-    update.message.reply_text(
-        'Hello {}'.format(update.message.from_user.first_name))
+@bb.handler(CommandHandler, 'toutiao')
+def tt(bot, update):
+    # update.effective_message.text
+    tt = toutiao.Toutiao()
+    r = tt.fetch('news_hot')
+    reply = '{title} by {source} \n{abstract} \n{article_url}'
+    for d in r['data']:
+        # logger.info(d)
+        update.message.reply_text(
+            reply.format(title=d['title'], abstract=d['abstract'], source=d['source'], article_url=d['article_url']))
 
 
 # /start command
