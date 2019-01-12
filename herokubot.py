@@ -5,7 +5,7 @@ import os
 from telegram.ext import CommandHandler, MessageHandler, Filters
 
 from basebot import BaseBot
-from models import tuling, toutiao, qiubai
+from models import tuling, toutiao, qiubai, yiguan
 from utils.utils import logger
 
 # Set these variable to the appropriate values
@@ -60,6 +60,16 @@ def tt(bot, update):
         # logger.info(d)
         update.message.reply_markdown(
             reply.format(title=d['title'], abstract=d['abstract'], source=d['source'], article_url=d['article_url']))
+
+@bb.handler(CommandHandler, '1guan')
+def yiguan(bot, update):
+    yg = yiguan.YiGuan()
+    r = yg.feed()
+    for i in r['data']:
+        for img in i['photos']:
+            update.message.reply_photo(
+                media=img['url']
+            )
 
 
 # /start command
