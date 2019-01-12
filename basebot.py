@@ -1,15 +1,24 @@
 # coding: utf-8
-
+import os
 from telegram.ext import Updater
 
-from utils.utils import logger
+from utils.utils import logger, get_local_token
 
-
+# Set these variable to the appropriate values
 class BaseBot(object):
+    # Please set your token in Heroku app settingss with key 'TELEGRAM_TOKEN'
+    TOKEN = os.environ.get('TELEGRAM_TOKEN')
+    IS_HEROKU = True
 
-    def __init__(self, token, **kwargs):
-        self.TOKEN = token
-        self.updater = Updater(token, **kwargs)
+    def __init__(self, **kwargs):
+        # Change to local mode if can't get TOKEN value from Heroku settings
+        if not self.TOKEN:
+            self.IS_HEROKU = False
+            # Please put your TOKEN in utils/token.txt file.
+            self.TOKEN = get_local_token()
+            # Config your proxy if necessary, else you can comment out this line
+            kwargs['request_kwargs'] = {'proxy_url': 'socks5://127.0.0.1:1086/',}
+        self.updater = Updater(self.TOKEN, **kwargs)
         self.updater.dispatcher.add_error_handler(self.error)
 
     def error(self, bot, update, error):
@@ -35,9 +44,13 @@ class BaseBot(object):
 
         return d
 
-    def go(self, webhook_url=None, port=None):
-        if webhook_url:
-            # Start the webhook
+    def go(self):
+        if self.IS_HEROKU:
+            # Get Heroku app name
+            name = os.environ.get('APP_NAME')
+            # Get Heroku app port
+            port = os.environ.get('PORT')
+            webhook_url = "https://{}.herokuapp.com/{}".format(name, self.TOKEN)
             self.updater.start_webhook(listen="0.0.0.0",
                                   port=int(port),
                                   url_path=self.TOKEN)

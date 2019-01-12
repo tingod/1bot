@@ -8,13 +8,13 @@ from basebot import BaseBot
 from models import tuling, toutiao, qiubai, yiguan
 from utils.utils import logger
 
-# Set these variable to the appropriate values
-TOKEN = os.environ.get('TELEGRAM_TOKEN')
-NAME = os.environ.get('APP_NAME')
-PORT = os.environ.get('PORT')
-webhook_url = "https://{}.herokuapp.com/{}".format(NAME, TOKEN)
+# # Set these variable to the appropriate values
+# TOKEN = os.environ.get('TELEGRAM_TOKEN')
+# NAME = os.environ.get('APP_NAME')
+# PORT = os.environ.get('PORT')
+# webhook_url = "https://{}.herokuapp.com/{}".format(NAME, TOKEN)
 
-bb = BaseBot(TOKEN)
+bb = BaseBot()
 
 """
 Add handlers here
@@ -62,7 +62,7 @@ def tt(bot, update):
             reply.format(title=d['title'], abstract=d['abstract'], source=d['source'], article_url=d['article_url']))
 
 @bb.handler(CommandHandler, '1guan')
-def yiguan(bot, update):
+def yg(bot, update):
     yg = yiguan.YiGuan()
     r = yg.feed()
     for i in r['data']:
@@ -96,4 +96,4 @@ def unknown(bot, update):
 
 
 # Run bot
-bb.go(webhook_url=webhook_url, port=PORT)
+bb.go()
