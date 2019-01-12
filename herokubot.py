@@ -68,7 +68,7 @@ def yiguan(bot, update):
     for i in r['data']:
         for img in i['photos']:
             update.message.reply_photo(
-                media=img['url']
+                photo=img['url']
             )
 
 
