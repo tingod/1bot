@@ -3,19 +3,21 @@ import logging
 import random
 import requests
 import os
+from json.decoder import JSONDecodeError
 
 from config import config
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-logger = logging.getLogger()
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.WARNING)
+logger = logging.getLogger(__name__)
 
 # DATA_FOLDER = os.path.join(os.path.dirname(__file__), config.DATA_FOLDER)
 
-
 def sj(url, params=None, headers=None, **kwargs):
     response = requests.get(url, params, headers=headers, **kwargs)
-    # logger.info(response.content)
-    return response.json()
+    try:
+        return response.json()
+    except JSONDecodeError:
+        return response.content
 
 
 def s(url, params=None, headers=None, **kwargs):
@@ -45,5 +47,9 @@ def get_random_user_agent():
     :return: Random user agent string.
     """
     return random.choice(_get_data('user_agents.txt', config.DEFAULT_USER_AGENT))
+
+
+def get_local_token():
+    return _get_data('token.txt')[0]
 
 

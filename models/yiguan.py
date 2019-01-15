@@ -105,6 +105,6 @@ class YiGuan(object):
         return sj(url=self.URL.format(load_point), params=dict(params, **p), **kwargs)
 
 
-songs = YiGuan().feed()
+# songs = YiGuan().feed()
 
-print(songs)
+# print(songs)

@@ -30,7 +30,6 @@ def qb(bot, update):
           '{content}' \
           ' by {login}'
     for d in r['items']:
-        # logger.info(d)
         update.message.reply_markdown(reply.format(votes=d['votes']['up'],content=d['content'], login=d['user']['login']))
 
 @bb.handler(CommandHandler, 'qiubaiimg')
@@ -41,9 +40,7 @@ def qbimg(bot, update):
     reply='[[{img_url}]] ' \
           '{content}' \
           ' by {author}'
-    # logger.info(r)
     for d in r:
-        # logger.info(d['img_url'])
         # update.message.reply_photo(photo='http:'+d['img_url'])
         update.message.reply_text('http:'+d['img_url'])
 
@@ -57,7 +54,6 @@ def tt(bot, update):
             '[{title}]({article_url})\n' \
             '{abstract}'
     for d in r['data']:
-        # logger.info(d)
         update.message.reply_markdown(
             reply.format(title=d['title'], abstract=d['abstract'], source=d['source'], article_url=d['article_url']))
 
