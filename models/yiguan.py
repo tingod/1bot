@@ -28,7 +28,7 @@ class YiGuan(object):
         r = self._call_api(load_point, params=params)
         return r
 
-    def feed(self, mood_id="evwB0oDG7Rr739axJQ8n"):
+    def feed(self, mood_id=""):
         load_point = "/feed/list"
         # load_point = "/feed/listRecommend"
 
