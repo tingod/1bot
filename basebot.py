@@ -31,16 +31,16 @@ class BaseBot(object):
         return self.updater.dispatcher
 
     # decorator:不用每定义一个函数都要用handler以及add_handler
-    def handler(self, h, cmd=None, **kw):
-        def d(func):
+    def h(self, handler, required=None, **kw):
+        def d(callback):
             def wrapper(*args, **kw):
-                return func(*args, **kw)
+                return callback(*args, **kw)
 
-            if not cmd:
-                func_handler = h(func, **kw)
+            if not required:
+                callback_handler = handler(callback, **kw)
             else:
-                func_handler = h(cmd, func, **kw)
-            self.updater.dispatcher.add_handler(func_handler)
+                callback_handler = handler(required, callback, **kw)
+            self.updater.dispatcher.add_handler(callback_handler)
             return wrapper
 
         return d
@@ -55,7 +55,8 @@ class BaseBot(object):
             port = os.environ.get('PORT')
             webhook_url = "https://{}.herokuapp.com/{}".format(name, self.TOKEN)
             self.updater.start_webhook(listen="0.0.0.0",
-                                       port=int(port),
+                                       # port=int(port),
+                                       port=80,
                                        url_path=self.TOKEN)
             self.updater.bot.setWebhook(webhook_url)
         else:
